@@ -1,0 +1,22 @@
+{
+    "@@locale": "en",
+    "appName": "PBRS Mart",
+    "welcomeBack": "Welcome Back",
+    "signInToContinue": "Sign in to Continue",
+    "signUpToContinue": "Sign up to Continue",
+    "mobileNumber": "Mobile Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "email": "Email",
+    "signIn": "SIGN IN NOW",
+    "signUp": "SIGN UP NOW",
+    "forgotPassword": "Forgot Password?",
+    "terms": "Terms & Conditions",
+    "noAccount": "You don't have an account?",
+    "signUpHere": "Sign Up",
+    "invalidEmail": "Please enter a valid email",
+    "requiredField": "This field is required",
+    "passwordLength": "Password must be at least 6 characters",
+    "passwordMismatch": "Passwords do not match"
+}

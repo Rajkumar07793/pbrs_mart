@@ -1,0 +1,22 @@
+{
+    "@@locale": "en_IN",
+    "appName": "PBRS Mart",
+    "welcomeBack": "Welcome back yaar!",
+    "signInToContinue": "Sign in karo aur chalo aage",
+    "signUpToContinue": "Naya account banao aur chalo aage",
+    "mobileNumber": "Mobile number daalo",
+    "password": "Password daalo",
+    "confirmPassword": "Dubara password likho",
+    "name": "Naam",
+    "email": "Email ID",
+    "signIn": "Sign in now",
+    "signUp": "Sign up abhi",
+    "forgotPassword": "Password bhool gaye?",
+    "terms": "Terms & Conditions maan lo",
+    "noAccount": "Kya account nahi hai?",
+    "signUpHere": "Sign up yaha karo",
+    "invalidEmail": "Sahi email daalo",
+    "requiredField": "Ye field zaroori hai",
+    "passwordLength": "Password kam se kam 6 character ka hona chahiye",
+    "passwordMismatch": "Passwords match nahi kar rahe"
+}

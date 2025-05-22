@@ -1,0 +1,10 @@
+class ProductModel {
+  final String id;
+  final String name;
+
+  ProductModel({required this.id, required this.name});
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(id: json['id'].toString(), name: json['name']);
+  }
+}

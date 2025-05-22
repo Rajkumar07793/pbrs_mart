@@ -1,0 +1,22 @@
+{
+    "@@locale": "hi",
+    "appName": "पीबीआरएस मार्ट",
+    "welcomeBack": "वापसी पर स्वागत है",
+    "signInToContinue": "जारी रखने के लिए साइन इन करें",
+    "signUpToContinue": "जारी रखने के लिए साइन अप करें",
+    "mobileNumber": "मोबाइल नंबर",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "name": "नाम",
+    "email": "ईमेल",
+    "signIn": "साइन इन करें",
+    "signUp": "साइन अप करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "terms": "नियम और शर्तें",
+    "noAccount": "क्या आपके पास खाता नहीं है?",
+    "signUpHere": "साइन अप करें",
+    "invalidEmail": "कृपया एक वैध ईमेल दर्ज करें",
+    "requiredField": "यह फ़ील्ड आवश्यक है",
+    "passwordLength": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
+    "passwordMismatch": "पासवर्ड मेल नहीं खाते"
+}

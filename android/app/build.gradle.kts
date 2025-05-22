@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.pbrs_mart"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
