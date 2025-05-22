@@ -100,7 +100,7 @@ class OfferZone extends StatelessWidget {
           crossAxisCount: 2,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.6,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
