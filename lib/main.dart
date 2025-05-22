@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pbrs_mart/l10n/generated/i10n/app_localizations.dart';
-import 'package:pbrs_mart/views/widgets/custom_bottom_bar.dart';
+import 'package:pbrs_mart/views/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,9 +22,9 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('en'), Locale('hi'), Locale('hinglish')],
-      home: const CustomBottomNavBar(),
-
+      home: const LoginScreen(),
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white70,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
     );

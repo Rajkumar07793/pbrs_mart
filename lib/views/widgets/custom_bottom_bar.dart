@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pbrs_mart/views/dashboard/homepage.dart';
-import 'package:pbrs_mart/views/dashboard/second_screen.dart';
 import 'package:pbrs_mart/views/dashboard/order_screen.dart';
+import 'package:pbrs_mart/views/dashboard/second_screen.dart';
 import 'package:pbrs_mart/views/dashboard/service_screen.dart';
 import 'package:pbrs_mart/views/widgets/custom_app_bar.dart';
 import 'package:pbrs_mart/views/widgets/custom_drawer.dart';
@@ -82,7 +82,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 ),
                 GButton(icon: Icons.circle, iconColor: Colors.transparent),
                 GButton(
-                  icon: Icons.bar_chart_rounded,
+                  icon: Icons.list_alt_rounded,
                   onPressed: () => setState(() => _selectedIndex = 2),
                 ),
                 GButton(

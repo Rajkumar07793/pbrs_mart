@@ -6,26 +6,37 @@ Drawer buildAppDrawer() {
     child: ListView(
       padding: EdgeInsets.zero,
       children: [
-        DrawerHeader(
-          decoration: BoxDecoration(color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/ic_prbs_3.png', // Replace with your logo asset path
-                height: 54,
-              ),
-              Text(
-                'Welcome Prashant Patel',
-                style: TextStyle(fontSize: 16, color: Colors.black87),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Handle logout
-                },
-                child: Text('Logout', style: TextStyle(color: Colors.black)),
-              ),
-            ],
+        SizedBox(
+          height: 250,
+          child: DrawerHeader(
+            decoration: BoxDecoration(color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/ic_prbs_3.png', // Replace with your logo asset path
+                  height: 100,
+                ),
+                Text(
+                  'Welcome Prashant Patel',
+                  style: TextStyle(
+                    fontSize: 16,
+                    // color: Colors.black87
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Handle logout
+                  },
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      // color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         _buildDrawerItem('My Profile', 'assets/images/ic_myprofile.png'),

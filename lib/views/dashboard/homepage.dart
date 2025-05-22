@@ -3,7 +3,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:faker/faker.dart' hide Image;
 import 'package:flutter/material.dart';
-
+import 'package:pbrs_mart/core/constants/colors.dart';
 import 'package:pbrs_mart/views/widgets/custom_tab_section.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,20 +68,32 @@ class OfferZone extends StatelessWidget {
   Widget build(BuildContext context) {
     final productData = [
       {
-        'title': 'Lifebuoy Total 10 Soap Bar, 8x125g Multipack',
-        'image': faker.image.image(keywords: ['grocery'], random: true),
+        'title': faker.food.dish(),
+        'image': faker.image.image(
+          keywords: ['products', 'soap'],
+          random: true,
+        ),
       },
       {
-        'title': 'Lifebuoy Total 10 Handwash, 3x750ml',
-        'image': faker.image.image(keywords: ['grocery'], random: true),
+        'title': faker.food.dish(),
+        'image': faker.image.image(
+          keywords: ['products', 'grocery'],
+          random: true,
+        ),
       },
       {
-        'title': 'Lifebuoy Total 10 Handwash, 3x750ml',
-        'image': faker.image.image(keywords: ['grocery'], random: true),
+        'title': faker.food.dish(),
+        'image': faker.image.image(
+          keywords: ['products', 'soap'],
+          random: true,
+        ),
       },
       {
-        'title': 'Another Grocery Item',
-        'image': faker.image.image(keywords: ['grocery'], random: true),
+        'title': faker.food.dish(),
+        'image': faker.image.image(
+          keywords: ['products', 'electronic'],
+          random: true,
+        ),
       },
     ];
 
@@ -100,10 +112,9 @@ class OfferZone extends StatelessWidget {
           crossAxisCount: 2,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 0.6,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
+          childAspectRatio: 0.7,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
           children:
               productData.map((product) {
                 return _buildOfferCard(product['title']!, product['image']!);
@@ -114,46 +125,54 @@ class OfferZone extends StatelessWidget {
   }
 
   Widget _buildOfferCard(String title, String imageUrl) {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(imageUrl, height: 120, fit: BoxFit.cover),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Supplier - Super Admin',
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
+    String selectedValue = "Select Variant";
+    return Card(
+      elevation: 0,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+              child: Image.network(imageUrl, height: 120, fit: BoxFit.cover),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
+          ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.lightYellow,
+              borderRadius: BorderRadius.circular(5),
             ),
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+            child: Text(
+              'Supplier - Super Admin',
+              style: TextStyle(fontSize: 10, color: Colors.black),
+            ),
+          ),
+          Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
 
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 120,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrangeAccent,
-                  ),
-                  child: Text(
-                    'ADD',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ),
-              ),
+          DropdownButton(
+            value: selectedValue,
+            items:
+                ["Select Variant", "₹999.00/100 ML", "₹1999.00/200 ML"]
+                    .map((e) => DropdownMenuItem(value: e, child: Text("$e")))
+                    .toList(),
+            onChanged: (v) {
+              selectedValue = v ?? "";
+            },
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.orange),
+            child: Text(
+              'ADD',
+              style: TextStyle(color: Colors.white, fontSize: 14),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

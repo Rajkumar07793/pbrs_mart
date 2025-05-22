@@ -52,7 +52,7 @@ class _TabSectionState extends State<TabSection>
           ],
         ),
         SizedBox(
-          height: 175,
+          height: 195,
           child: TabBarView(
             controller: _tabController,
             children: List.generate(3, (index) {
@@ -76,39 +76,61 @@ class _TabSectionState extends State<TabSection>
 
   Widget _buildTabContent(String title) {
     final faker = Faker();
-    return Row(
-      children: [
-        SizedBox(
-          width: 130,
-          child: Card(
-            color: Colors.cyan.shade100,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ClipOval(
-                    child: Image.network(
-                      faker.image.image(keywords: ['grocery'], random: true),
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    faker.company.name(),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+    return GridView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 0.7,
+      ),
+      itemCount: 3,
+      itemBuilder:
+          (context, index) => CategoryCard(
+            title: title,
+            imageUrl: faker.image.image(keywords: ['grocery'], random: true),
+          ),
+    );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  final String title;
+  final String imageUrl;
+
+  const CategoryCard({super.key, required this.title, required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final faker = Faker();
+    return SizedBox(
+      width: 130,
+      child: Card(
+        color: Colors.cyan.shade100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClipOval(
+                child: Image.network(
+                  faker.image.image(keywords: ['grocery'], random: true),
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.fill,
+                ),
               ),
-            ),
+              const SizedBox(height: 10),
+              Text(
+                faker.company.name(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

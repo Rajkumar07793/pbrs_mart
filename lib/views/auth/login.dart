@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbrs_mart/l10n/generated/i10n/app_localizations.dart';
 import 'package:pbrs_mart/views/auth/sign_up.dart';
+import 'package:pbrs_mart/views/widgets/custom_bottom_bar.dart';
 import 'package:pbrs_mart/views/widgets/custom_password_field.dart';
 import 'package:pbrs_mart/views/widgets/custom_textfield.dart';
 
@@ -119,6 +120,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             // Submit form
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const CustomBottomNavBar(),
+                              ),
+                              (route) => false,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(

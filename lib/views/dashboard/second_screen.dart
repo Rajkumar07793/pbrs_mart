@@ -6,12 +6,8 @@ class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 10),
-          Text('Comming Soon ...', style: TextStyle(fontSize: 15)),
-        ],
+      body: Center(
+        child: Text('Comming Soon ...', style: TextStyle(fontSize: 15)),
       ),
     );
   }
