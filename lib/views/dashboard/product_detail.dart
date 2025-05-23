@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart' hide Image;
 import 'package:flutter/material.dart';
+import 'package:pbrs_mart/views/dashboard/my_cart_screen.dart';
 import 'package:pbrs_mart/views/widgets/add_counter_button.dart';
 import 'package:pbrs_mart/views/widgets/custom_dropdown.dart';
 
@@ -18,7 +19,11 @@ class ProductDetailScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.orange),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => MyCartScreen()));
+            },
           ),
         ],
       ),

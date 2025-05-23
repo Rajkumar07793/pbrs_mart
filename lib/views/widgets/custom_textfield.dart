@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String hint;
   final TextInputType keyboardType;
   final TextEditingController controller;
@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
 
   const CustomTextField({
     super.key,
-    required this.label,
+    this.label,
     required this.hint,
     this.keyboardType = TextInputType.text,
     required this.controller,
