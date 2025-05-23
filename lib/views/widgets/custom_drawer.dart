@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pbrs_mart/views/auth/login.dart';
+import 'package:pbrs_mart/views/widgets/custom_elevated_button.dart';
 
-Drawer buildAppDrawer() {
+Drawer buildAppDrawer(BuildContext context) {
   return Drawer(
     backgroundColor: Color(0xFFF9F4FC),
     child: ListView(
@@ -26,7 +28,7 @@ Drawer buildAppDrawer() {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Handle logout
+                    showPopUpDialog(context);
                   },
                   child: Text(
                     'Logout',
@@ -63,5 +65,52 @@ Widget _buildDrawerItem(String title, String iconPath) {
     onTap: () {
       // Add navigation or action here
     },
+  );
+}
+
+void showPopUpDialog(BuildContext ctx) {
+  showDialog(
+    context: ctx,
+    builder:
+        (ctx) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'PBRS Mart',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            Align(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    title: 'NO',
+                  ),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pushReplacement(
+                        MaterialPageRoute(builder: (ctx) => LoginScreen()),
+                      );
+                    },
+                    title: 'Yes',
+                  ),
+                ],
+              ),
+            ),
+          ],
+          content: SizedBox(
+            height: 50,
+            child: Text(
+              'Do you really want to logout from PBRS Mart ?',
+              maxLines: 2,
+            ),
+          ),
+        ),
   );
 }

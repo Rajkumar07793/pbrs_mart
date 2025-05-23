@@ -81,7 +81,7 @@ class _TabSectionState extends State<TabSection>
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.68,
       ),
       itemCount: 3,
       itemBuilder:

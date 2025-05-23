@@ -23,7 +23,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     Container(),
     OrderScreen(),
     ServiceScreen(),
-    // ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return Scaffold(
       key: scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: buildAppDrawer(),
+      drawer: buildAppDrawer(context),
       body: _screens[_selectedIndex],
       floatingActionButton: SizedBox(
         height: 65,
