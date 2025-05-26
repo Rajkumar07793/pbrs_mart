@@ -1,37 +1,19 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pbrs_mart/views/auth/login.dart';
+import 'package:get/get.dart';
+import 'package:pbrs_mart/controllers/screens_controller/splash_controller.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class SplashScreen extends StatelessWidget {
+  SplashScreen({super.key});
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    // Wait 3 seconds then navigate
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-    });
-  }
+  // Instantiate the controller using Get.put() for dependency injection
+  final SplashController controller = Get.put(SplashController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset(
-          'assets/images/ic_prbs_3.png', // Make sure to add your image in assets
-          width: 200,
-        ),
+        child: Image.asset('assets/images/ic_prbs_3.png', width: 200),
       ),
     );
   }

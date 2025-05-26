@@ -1,38 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pbrs_mart/controllers/auth_controllers/login_controller.dart';
+import 'package:pbrs_mart/core/utils/routes.dart';
 import 'package:pbrs_mart/l10n/generated/i10n/app_localizations.dart';
-import 'package:pbrs_mart/views/auth/sign_up.dart';
-import 'package:pbrs_mart/views/widgets/custom_bottom_bar.dart';
 import 'package:pbrs_mart/views/widgets/custom_elevated_button.dart';
 import 'package:pbrs_mart/views/widgets/custom_password_field.dart';
 import 'package:pbrs_mart/views/widgets/custom_textfield.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  bool agreeToTerms = false;
-  final _mobileController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _forgetPwdController = TextEditingController();
-  final _otpController = TextEditingController();
-  final _confirmController = TextEditingController();
-
-  bool _obscurePassword = true;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _mobileController.text;
-    _passwordController.text;
-    _otpController.text;
-    _forgetPwdController.text;
-    _confirmController.text;
-  }
+  final LoginController controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Center(
             child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: controller.formKey,
                 child: Column(
                   children: [
                     Image.asset('assets/images/ic_prbs_3.png', height: 100),
@@ -76,27 +54,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 30),
                     CustomTextField(
-                      controller: _mobileController,
+                      controller: controller.mobileController,
                       keyboardType: TextInputType.phone,
                       hint: loc.mobileNumber,
                       label: loc.mobileNumber,
-                      validator:
-                          (value) =>
-                              value == null || value.isEmpty
-                                  ? loc.requiredField
-                                  : null,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return loc.requiredField;
+                        }
+                        if (value.length < 6) return loc.passwordLength;
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 20),
                     CustomPasswordField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
+                      controller: controller.passwordController,
                       label: loc.password,
                       hint: loc.password,
-                      onToggle:
-                          () => setState(
-                            () => _obscurePassword = !_obscurePassword,
-                          ),
-
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return loc.requiredField;
@@ -112,9 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           showForgetPopUp(
                             context,
-                            _otpController,
-                            _forgetPwdController,
-                            _confirmController,
+                            controller.otpController,
+                            controller.forgetPwdController,
+                            controller.confirmController,
                           );
                         },
                         child: Text(
@@ -125,31 +99,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Row(
                       children: [
-                        Checkbox(
-                          value: agreeToTerms,
-                          onChanged:
-                              (value) =>
-                                  setState(() => agreeToTerms = value ?? false),
+                        Obx(
+                          () => Checkbox(
+                            value: controller.agreeToTerms.value,
+                            onChanged:
+                                (val) =>
+                                    controller.agreeToTerms.value =
+                                        val ?? false,
+                          ),
                         ),
-                        Text(loc.terms),
+                        Flexible(child: Text(loc.terms)),
                       ],
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Submit form
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const CustomBottomNavBar(),
-                              ),
-                              (route) => false,
-                            );
-                          }
-                        },
+                        onPressed: controller.submitLogin,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6A4FA3),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -174,13 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextSpan(text: loc.noAccount),
                           WidgetSpan(
                             child: GestureDetector(
-                              onTap:
-                                  () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const SignUpScreen(),
-                                    ),
-                                  ),
+                              onTap: () => Get.toNamed(AppRoutes.signUp),
                               child: Text(
                                 ' ${loc.signUpHere}',
                                 style: const TextStyle(
@@ -215,8 +175,7 @@ void showForgetPopUp(
     builder:
         (ctx) => AlertDialog(
           backgroundColor: Colors.white,
-
-          title: Text(
+          title: const Text(
             'Change Password',
             style: TextStyle(
               color: Colors.black,
@@ -233,18 +192,24 @@ void showForgetPopUp(
                 width: double.infinity,
                 onPressed: () {
                   Navigator.pop(ctx);
+                  // Add controller logic here
                 },
                 title: 'Submit',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text("Haven't received OTP ?", style: TextStyle(fontSize: 14)),
+                const Text(
+                  "Haven't received OTP ?",
+                  style: TextStyle(fontSize: 14),
+                ),
                 InkWell(
-                  onTap: () {},
-                  child: Text(
+                  onTap: () {
+                    // Trigger resend logic
+                  },
+                  child: const Text(
                     "Resend",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
@@ -264,7 +229,7 @@ void showForgetPopUp(
               CustomTextField(
                 controller: pwdcontroller,
                 hint: 'Enter Password',
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
               ),
               CustomTextField(
                 controller: confirmcontroller,
