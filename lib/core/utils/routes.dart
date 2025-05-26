@@ -1,10 +1,8 @@
 import 'package:get/get.dart';
 import 'package:pbrs_mart/views/auth/login.dart';
 import 'package:pbrs_mart/views/auth/sign_up.dart';
-import 'package:pbrs_mart/views/dashboard/splash_screen.dart';
 import 'package:pbrs_mart/views/onboard/custom_bottom_bar.dart';
 import 'package:pbrs_mart/views/onboard/splash_screen.dart';
-import 'package:pbrs_mart/views/widgets/custom_bottom_bar.dart';
 
 class AppRoutes {
   static final routes = [
