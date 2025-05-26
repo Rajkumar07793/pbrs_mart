@@ -51,7 +51,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAccount => 'You don\'t have an account?';
 
   @override
+  String get haveAnAccount => 'Already have an account?';
+
+  @override
   String get signUpHere => 'Sign Up';
+
+  @override
+  String get signInHere => 'Sign In';
 
   @override
   String get invalidEmail => 'Please enter a valid email';
@@ -113,7 +119,13 @@ class AppLocalizationsEnIn extends AppLocalizationsEn {
   String get noAccount => 'Kya account nahi hai?';
 
   @override
+  String get haveAnAccount => 'Kya account hai?';
+
+  @override
   String get signUpHere => 'Sign up yaha karo';
+
+  @override
+  String get signInHere => 'Sign up yaha karo';
 
   @override
   String get invalidEmail => 'Sahi email daalo';

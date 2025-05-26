@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return loc.requiredField;
                         }
-                        if (value.length < 6) return loc.passwordLength;
+                        if (value.length < 6) return loc.mobileNumber;
                         return null;
                       },
                     ),
@@ -83,14 +83,52 @@ class LoginScreen extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {
-                          showForgetPopUp(
-                            context,
-                            controller.otpController,
-                            controller.forgetPwdController,
-                            controller.confirmController,
-                          );
+                        onPressed: () async {
+                          final mobile = controller.mobileController.text;
+
+                          if (mobile.isEmpty || mobile.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "Enter a valid mobile number",
+                            );
+                            return;
+                          }
+
+                          controller.mobileController.text = mobile;
+
+                          // Send OTP first
+                          final response = await controller.apiService
+                              .sendResetPasswordOtp(mobile: mobile);
+
+                          if (response != null && response.statusCode == 200) {
+                            Get.snackbar(
+                              "Success",
+                              "OTP sent to your mobile",
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.teal,
+                              colorText: Colors.white,
+                              icon: const Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.white,
+                              ),
+                            );
+                            // Show popup after OTP is sent
+                            showForgetPopUp(context, LoginController());
+                          } else {
+                            Get.snackbar(
+                              "Error",
+                              "Failed to send OTP",
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                              icon: const Icon(
+                                Icons.error_outline,
+                                color: Colors.white,
+                              ),
+                            );
+                          }
                         },
+
                         child: Text(
                           loc.forgotPassword,
                           style: const TextStyle(color: Colors.black87),
@@ -102,33 +140,40 @@ class LoginScreen extends StatelessWidget {
                         Obx(
                           () => Checkbox(
                             value: controller.agreeToTerms.value,
-                            onChanged:
-                                (val) =>
-                                    controller.agreeToTerms.value =
-                                        val ?? false,
+                            onChanged: controller.toggleAgreeToTerms,
                           ),
                         ),
                         Flexible(child: Text(loc.terms)),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: controller.submitLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6A4FA3),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Obx(
+                      () => SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed:
+                              controller.isLoading.value
+                                  ? null
+                                  : controller.submitLogin,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF6A4FA3),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          loc.signIn,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                          child:
+                              controller.isLoading.value
+                                  ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                  : Text(
+                                    loc.signIn,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                         ),
                       ),
                     ),
@@ -164,12 +209,7 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-void showForgetPopUp(
-  BuildContext ctx,
-  TextEditingController otpcontroller,
-  TextEditingController pwdcontroller,
-  TextEditingController confirmcontroller,
-) {
+void showForgetPopUp(BuildContext ctx, LoginController controller) {
   showDialog(
     context: ctx,
     builder:
@@ -191,8 +231,7 @@ void showForgetPopUp(
                 height: 50,
                 width: double.infinity,
                 onPressed: () {
-                  Navigator.pop(ctx);
-                  // Add controller logic here
+                  controller.submitResetPassword();
                 },
                 title: 'Submit',
               ),
@@ -206,8 +245,57 @@ void showForgetPopUp(
                   style: TextStyle(fontSize: 14),
                 ),
                 InkWell(
-                  onTap: () {
-                    // Trigger resend logic
+                  onTap: () async {
+                    final mobile = controller.mobileController.text;
+
+                    if (mobile.isEmpty || mobile.length < 10) {
+                      print(mobile);
+                      Get.snackbar(
+                        "Error",
+                        "Enter a valid mobile number",
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.teal,
+                        colorText: Colors.white,
+                        borderRadius: 12,
+                        margin: EdgeInsets.all(16),
+                        icon: Icon(
+                          Icons.check_circle_outline,
+                          color: Colors.white,
+                        ),
+                        duration: Duration(seconds: 3),
+                        animationDuration: Duration(milliseconds: 300),
+                        forwardAnimationCurve: Curves.easeOutBack,
+                      );
+                      return;
+                    }
+                    // Send OTP first
+                    final response = await controller.apiService
+                        .sendResetPasswordOtp(mobile: mobile);
+                    if (response != null && response.statusCode == 200) {
+                      Get.snackbar(
+                        "Success",
+                        "Resend OTP to your mobile",
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.teal,
+                        colorText: Colors.white,
+                        icon: const Icon(
+                          Icons.check_circle_outline,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Error",
+                        "Failed to send OTP",
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                        icon: const Icon(
+                          Icons.error_outline,
+                          color: Colors.white,
+                        ),
+                      );
+                    }
                   },
                   child: const Text(
                     "Resend",
@@ -220,19 +308,20 @@ void showForgetPopUp(
           scrollable: true,
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            spacing: 6,
             children: [
               CustomTextField(
-                controller: otpcontroller,
+                controller: controller.otpController,
                 hint: 'Enter 6 Digit OTP',
                 keyboardType: TextInputType.number,
               ),
               CustomTextField(
-                controller: pwdcontroller,
+                controller: controller.newPwdController,
                 hint: 'Enter Password',
                 keyboardType: TextInputType.text,
               ),
               CustomTextField(
-                controller: confirmcontroller,
+                controller: controller.confirmController,
                 hint: 'Confirm Password',
                 keyboardType: TextInputType.text,
               ),

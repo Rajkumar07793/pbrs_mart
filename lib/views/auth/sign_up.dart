@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbrs_mart/controllers/auth_controllers/signup_controller.dart';
+import 'package:pbrs_mart/core/utils/routes.dart';
 import 'package:pbrs_mart/l10n/generated/i10n/app_localizations.dart';
 import 'package:pbrs_mart/views/widgets/custom_password_field.dart';
 import 'package:pbrs_mart/views/widgets/custom_textfield.dart';
@@ -136,12 +137,10 @@ class SignUpScreen extends StatelessWidget {
                                 if (controller.formKey.currentState!
                                     .validate()) {
                                   controller.signUpUser(
-                                    name: controller.nameController.text.trim(),
-                                    mobile:
-                                        controller.mobileController.text.trim(),
+                                    name: controller.nameController.text,
+                                    mobile: controller.mobileController.text,
                                     password:
-                                        controller.passwordController.text
-                                            .trim(),
+                                        controller.passwordController.text,
                                   );
                                 }
                               },
@@ -159,6 +158,27 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   );
                 }),
+                const SizedBox(height: 20),
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.black87),
+                    children: [
+                      TextSpan(text: loc.haveAnAccount),
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () => Get.toNamed(AppRoutes.login),
+                          child: Text(
+                            ' ${loc.signInHere}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

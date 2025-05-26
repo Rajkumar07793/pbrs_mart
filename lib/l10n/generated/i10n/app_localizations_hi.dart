@@ -51,7 +51,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get noAccount => 'क्या आपके पास खाता नहीं है?';
 
   @override
+  String get haveAnAccount => 'क्या आपके पास खाता है?';
+
+  @override
   String get signUpHere => 'साइन अप करें';
+
+  @override
+  String get signInHere => 'साइन इन करें';
 
   @override
   String get invalidEmail => 'कृपया एक वैध ईमेल दर्ज करें';
