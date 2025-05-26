@@ -94,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                             return;
                           }
 
-                          controller.mobileController.text = mobile;
+                          // controller.mobileController.text = mobile;
 
                           // Send OTP first
                           final response = await controller.apiService
@@ -113,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                             );
                             // Show popup after OTP is sent
-                            showForgetPopUp(context, LoginController());
+                            showForgetPopUp(context, controller);
                           } else {
                             Get.snackbar(
                               "Error",
