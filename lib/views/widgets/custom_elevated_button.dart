@@ -22,9 +22,7 @@ class CustomElevatedButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(5),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         ),
         child: Text(
           title.toString(),

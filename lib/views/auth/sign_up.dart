@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pbrs_mart/controllers/auth_controllers/signup_controller.dart';
 import 'package:pbrs_mart/l10n/generated/i10n/app_localizations.dart';
 import 'package:pbrs_mart/views/widgets/custom_password_field.dart';
 import 'package:pbrs_mart/views/widgets/custom_textfield.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key});
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _mobileController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  final SignUpController controller = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
           child: Form(
-            key: _formKey,
+            key: controller.formKey,
             child: Column(
               children: [
                 const SizedBox(height: 20),
@@ -61,7 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 CustomTextField(
                   label: loc.name,
-                  controller: _nameController,
+                  controller: controller.nameController,
                   hint: loc.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -70,26 +59,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
+
                 CustomTextField(
                   label: loc.email,
-                  controller: _emailController,
+                  controller: controller.emailController,
                   hint: 'test@example.com',
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return loc.requiredField;
                     }
-                    if (!RegExp(
-                      r'^[\w\.-]+@[\w\.-]+\.\w{2,4}$',
-                    ).hasMatch(value)) {
-                      return loc.invalidEmail;
-                    }
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
+
                 CustomTextField(
                   label: loc.mobileNumber,
-                  controller: _mobileController,
+                  controller: controller.mobileController,
                   hint: '9876543210',
                   keyboardType: TextInputType.phone,
                   validator: (value) {
@@ -99,69 +87,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 10),
 
                 CustomPasswordField(
                   label: loc.password,
                   hint: loc.password,
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
+                  controller: controller.passwordController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return loc.requiredField;
                     }
                     return null;
                   },
-                  onToggle: () {
-                    setState(() => _obscurePassword = !_obscurePassword);
-                  },
                 ),
+                const SizedBox(height: 10),
+
                 CustomPasswordField(
                   label: loc.confirmPassword,
                   hint: loc.confirmPassword,
-                  controller: _confirmPasswordController,
-                  obscureText: _obscureConfirmPassword,
-                  onToggle: () {
-                    setState(
-                      () => _obscureConfirmPassword = !_obscureConfirmPassword,
-                    );
-                  },
+                  controller: controller.confirmPasswordController,
                   validator: (value) {
-                    if (value != _passwordController.text) {
-                      return loc.passwordMismatch;
-                    }
                     if (value == null || value.isEmpty) {
                       return loc.requiredField;
+                    }
+                    if (value != controller.passwordController.text) {
+                      return loc.passwordMismatch;
                     }
                     return null;
                   },
                 ),
-
                 const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6A4FA3),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+
+                Obx(() {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF6A4FA3),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
+                      onPressed:
+                          controller.isLoading.value
+                              ? null
+                              : () {
+                                if (controller.formKey.currentState!
+                                    .validate()) {
+                                  controller.signUpUser(
+                                    name: controller.nameController.text.trim(),
+                                    mobile:
+                                        controller.mobileController.text.trim(),
+                                    password:
+                                        controller.passwordController.text
+                                            .trim(),
+                                  );
+                                }
+                              },
+                      child:
+                          controller.isLoading.value
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                loc.signUp,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Submit form
-                      }
-                    },
-                    child: Text(
-                      loc.signUp,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
           ),
