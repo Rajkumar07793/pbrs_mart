@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pbrs_mart/views/dashboard/my_cart_screen.dart';
+import 'package:pbrs_mart/views/cart/my_cart_screen.dart';
 import 'package:pbrs_mart/views/widgets/custom_elevated_button.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {

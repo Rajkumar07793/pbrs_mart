@@ -1,6 +1,6 @@
 import 'package:faker/faker.dart' hide Image;
 import 'package:flutter/material.dart';
-import 'package:pbrs_mart/views/dashboard/my_cart_screen.dart';
+import 'package:pbrs_mart/views/cart/my_cart_screen.dart';
 import 'package:pbrs_mart/views/widgets/add_counter_button.dart';
 import 'package:pbrs_mart/views/widgets/custom_dropdown.dart';
 

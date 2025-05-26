@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+
 import '../models/user_model.dart';
 
 class ApiService {
   final Dio _dio = Dio();
   final String _baseUrl = 'https://pbrsmart.com/api';
+  final String _baseUrlPublic = 'https://pbrsmart.com/public';
   final String _token =
       'Bearer ZhhcZ7U4XqDgcp9QEPhmFts4gzNmBIK2ivdplCYshPeRLFYbgJgD6I7pQaz3Ik7e2MrQKV8VzMmsWZHB7UKLvoBObrJarLt5jjTs';
 

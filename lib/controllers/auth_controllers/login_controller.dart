@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pbrs_mart/core/utils/routes.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -38,7 +39,7 @@ class LoginController extends GetxController {
     if (validate()) {
       // Implement your login logic here
       // For example navigate to home or bottom nav bar
-      Get.offAllNamed('/bottom_nav'); // or your route
+      Get.offAllNamed(AppRoutes.bottomNav); // or your route
     }
   }
 }
