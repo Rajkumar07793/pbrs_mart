@@ -74,7 +74,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
 /// The translations for English, as used in India (`en_IN`).
 class AppLocalizationsEnIn extends AppLocalizationsEn {
-  AppLocalizationsEnIn(): super('en_IN');
+  AppLocalizationsEnIn() : super('en_IN');
 
   @override
   String get appName => 'PBRS Mart';
@@ -134,7 +134,8 @@ class AppLocalizationsEnIn extends AppLocalizationsEn {
   String get requiredField => 'Ye field zaroori hai';
 
   @override
-  String get passwordLength => 'Password kam se kam 6 character ka hona chahiye';
+  String get passwordLength =>
+      'Password kam se kam 6 character ka hona chahiye';
 
   @override
   String get passwordMismatch => 'Passwords match nahi kar rahe';

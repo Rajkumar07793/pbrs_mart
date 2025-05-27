@@ -1,93 +1,62 @@
-import 'package:faker/faker.dart' show Faker;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../controllers/component_controllers/tab_controller.dart';
+import '../../models/type_model.dart';
 
-class TabSection extends StatefulWidget {
+class TabSection extends StatelessWidget {
   const TabSection({super.key});
 
   @override
-  State<TabSection> createState() => _TabSectionState();
-}
+  Widget build(BuildContext context) {
+    // Use Get.put only once at the top level (not inside build again and again)
+    final controller = Get.put(TabSectionController());
 
-class _TabSectionState extends State<TabSection>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final List<bool> _isLoading = [false, true, true];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
-      int index = _tabController.index;
-      if (_isLoading[index]) {
-        setState(() {
-          _isLoading[index] = false;
-        });
-        // Simulate delay for loading
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {});
-        });
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
       }
+
+      return DefaultTabController(
+        length: controller.tabItems.length,
+        child: Column(
+          children: [
+            TabBar(
+              labelColor: Colors.deepPurple,
+              unselectedLabelColor: Colors.grey,
+              isScrollable: true,
+              tabs:
+                  controller.tabItems
+                      .map((item) => Tab(text: item.name))
+                      .toList(),
+            ),
+            SizedBox(
+              height: 195,
+              child: TabBarView(
+                children:
+                    controller.tabItems.map((item) {
+                      return _buildTabContent(item);
+                    }).toList(),
+              ),
+            ),
+          ],
+        ),
+      );
     });
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TabBar(
-          controller: _tabController,
-          labelColor: Colors.deepPurple,
-          unselectedLabelColor: Colors.grey,
-          tabs: const [
-            Tab(text: 'Services'),
-            Tab(text: 'Grocery'),
-            Tab(text: 'Agriculture'),
-          ],
-        ),
-        SizedBox(
-          height: 195,
-          child: TabBarView(
-            controller: _tabController,
-            children: List.generate(3, (index) {
-              if (_isLoading[index]) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return _buildTabContent(
-                  index == 0
-                      ? 'Service Main Category'
-                      : index == 1
-                      ? 'Grocery Items'
-                      : 'Agricultural Products',
-                );
-              }
-            }),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTabContent(String title) {
-    final faker = Faker();
+  Widget _buildTabContent(TypeModel type) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: 0.68,
       ),
       itemCount: 3,
       itemBuilder:
           (context, index) => CategoryCard(
-            title: title,
-            imageUrl: faker.image.image(keywords: ['grocery'], random: true),
+            title: type.name,
+            imageUrl: 'https://pbrsmart.com${type.image}',
           ),
     );
   }
@@ -101,7 +70,6 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final faker = Faker();
     return SizedBox(
       width: 130,
       child: Card(
@@ -109,20 +77,21 @@ class CategoryCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               ClipOval(
                 child: Image.network(
-                  faker.image.image(keywords: ['grocery'], random: true),
+                  imageUrl,
                   height: 100,
                   width: 100,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
-                faker.company.name(),
+                title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 textAlign: TextAlign.center,

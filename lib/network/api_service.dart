@@ -8,7 +8,6 @@ class ApiService {
   final Dio _dio = Dio();
 
   static const String _baseUrl = 'https://pbrsmart.com/api/users';
-  final String _baseUrlPublic = 'https://pbrsmart.com/public';
   static const String _authToken =
       'ZhhcZ7U4XqDgcp9QEPhmFts4gzNmBIK2ivdplCYshPeRLFYbgJgD6I7pQaz3Ik7e2MrQKV8VzMmsWZHB7UKLvoBObrJarLt5jjTs';
   static const String _cookieSession = '2e613f2feec5241ffea1785d6d34e5bc';
@@ -18,7 +17,6 @@ class ApiService {
     'Content-Type': 'application/json',
     'Cookie': 'PHPSESSID=$_cookieSession',
   };
-
   Future<Response?> signUp(UserModel user) async {
     try {
       final response = await _dio.post(
@@ -119,6 +117,32 @@ class ApiService {
       return response;
     } catch (e) {
       print('Reset Password Error: $e');
+      return null;
+    }
+  }
+
+  Future<Response?> getMainBanner() async {
+    try {
+      final response = await _dio.get(
+        '$_baseUrl/main-banner',
+        options: Options(headers: _headers),
+      );
+      return response;
+    } catch (e) {
+      print('Main-banner fetch error: $e');
+      return null;
+    }
+  }
+
+  Future<Response?> getUserTypes() async {
+    try {
+      final response = await _dio.get(
+        '$_baseUrl/type',
+        options: Options(headers: _headers),
+      );
+      return response;
+    } catch (e) {
+      print('User types fetch error: $e');
       return null;
     }
   }
