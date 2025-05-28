@@ -1,117 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:pbrs_mart/views/cart/my_cart_screen.dart';
+import 'package:get/get.dart';
+import 'package:pbrs_mart/controllers/component_controllers/custom_app_bar_controller.dart';
+import 'package:pbrs_mart/core/utils/routes.dart';
 import 'package:pbrs_mart/views/widgets/custom_elevated_button.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const CustomAppBar({super.key, required this.scaffoldKey});
 
   @override
-  State<CustomAppBar> createState() => _CustomAppBarState();
-
-  @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class _CustomAppBarState extends State<CustomAppBar> {
-  bool isSearching = false;
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final CustomAppBarController controller = Get.put(CustomAppBarController());
     return AppBar(
+      titleSpacing: 0,
       backgroundColor: Colors.white,
       elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.black),
-        onPressed: () {
-          widget.scaffoldKey.currentState?.openDrawer();
-        },
-      ),
-      title:
-          isSearching
-              ? TextField(
-                controller: _searchController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                ),
-                style: const TextStyle(color: Colors.black),
-                cursorColor: Colors.black,
-              )
-              : const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hi, User',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    'What would you like to have today',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
-              ),
-      actions: [
-        if (isSearching)
+      leading: Column(
+        children: [
           IconButton(
-            icon: const Icon(Icons.close, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                isSearching = false;
-                _searchController.clear();
-              });
-            },
-          )
-        else
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                isSearching = true;
-              });
-            },
-          ),
-        if (!isSearching) ...[
-          IconButton(
-            icon: const Icon(Icons.location_pin, color: Colors.pink),
-            onPressed: () {
-              showLocationPopUp(context, _searchController);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.orange),
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => MyCartScreen()));
-            },
+            onPressed: () => scaffoldKey.currentState?.openDrawer(),
+            icon: Image.asset('assets/images/ic_menu.png', height: 40),
           ),
         ],
+      ),
+      title: Obx(() {
+        return controller.isSearching.value
+            ? TextField(
+              controller: controller.searchController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Search...',
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.grey[400]),
+              ),
+              style: const TextStyle(color: Colors.black),
+              cursorColor: Colors.black,
+            )
+            : const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hi, User',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'What would you like to have today',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            );
+      }),
+      actions: [
+        Obx(
+          () =>
+              controller.isSearching.value
+                  ? IconButton(
+                    icon: const Icon(Icons.close, color: Colors.black),
+                    onPressed: controller.toggleSearch,
+                  )
+                  : IconButton(
+                    icon: const Icon(Icons.search, color: Colors.black),
+                    onPressed: controller.toggleSearch,
+                  ),
+        ),
+        Obx(() {
+          if (!controller.isSearching.value) {
+            return Row(
+              children: [
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  icon: Image.asset(
+                    'assets/images/ic_location.png',
+                    height: 40,
+                  ),
+                  onPressed: () => showLocationPopUp(context, controller),
+                ),
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  icon: Image.asset('assets/images/ic_cart.png', height: 40),
+                  onPressed: () => Get.toNamed(AppRoutes.myCart),
+                ),
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        }),
       ],
     );
   }
 }
 
-void showLocationPopUp(BuildContext ctx, TextEditingController controller) {
+void showLocationPopUp(
+  BuildContext context,
+  CustomAppBarController controller,
+) {
   showDialog(
-    context: ctx,
+    context: context,
     builder:
         (ctx) => AlertDialog(
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             'PBRS Mart',
             style: TextStyle(
               color: Colors.black,
@@ -120,26 +117,11 @@ void showLocationPopUp(BuildContext ctx, TextEditingController controller) {
             ),
             textAlign: TextAlign.center,
           ),
-          actions: [
-            Align(
-              alignment: Alignment.center,
-              child: CustomElevatedButton(
-                height: 50,
-                width: double.infinity,
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                title: 'Search Now',
-              ),
-            ),
-          ],
-
           content: SizedBox(
             height: 70,
             child: TextField(
-              controller: controller,
-
-              decoration: InputDecoration(
+              controller: controller.searchController,
+              decoration: const InputDecoration(
                 hintText: "Search Your Pincode Here",
                 hintStyle: TextStyle(
                   color: Colors.grey,
@@ -148,6 +130,17 @@ void showLocationPopUp(BuildContext ctx, TextEditingController controller) {
               ),
             ),
           ),
+          actions: [
+            Align(
+              alignment: Alignment.center,
+              child: CustomElevatedButton(
+                height: 50,
+                width: double.infinity,
+                onPressed: () => Navigator.pop(ctx),
+                title: 'Search Now',
+              ),
+            ),
+          ],
         ),
   );
 }

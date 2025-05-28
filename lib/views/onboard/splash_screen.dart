@@ -5,7 +5,6 @@ import 'package:pbrs_mart/controllers/screens_controller/splash_controller.dart'
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
 
-  // Instantiate the controller using Get.put() for dependency injection
   final SplashController controller = Get.put(SplashController());
 
   @override

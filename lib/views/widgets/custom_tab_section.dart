@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbrs_mart/network/api_service.dart';
+import 'package:pbrs_mart/views/widgets/custom_card.dart';
 import '../../controllers/component_controllers/tab_controller.dart';
 import '../../models/type_model.dart';
 
@@ -29,7 +30,7 @@ class TabSection extends StatelessWidget {
                       .toList(),
             ),
             SizedBox(
-              height: 200,
+              height: 180,
               child: TabBarView(
                 children:
                     controller.tabItems.map((item) {
@@ -63,7 +64,8 @@ class TabSection extends StatelessWidget {
 
       return GridView.builder(
         physics: ScrollPhysics(),
-        shrinkWrap: false,
+
+        shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           childAspectRatio: 0.68,
@@ -88,53 +90,12 @@ class TabSection extends StatelessWidget {
           final imagePath = item['image'] ?? '';
 
           return CategoryCard(
+            onTap: () {},
             title: title,
             imageUrl: '${ApiService.baseUrlImage}$imagePath',
           );
         },
       );
     });
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final String title;
-  final String imageUrl;
-
-  const CategoryCard({super.key, required this.title, required this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      child: Card(
-        color: Colors.cyan.shade100,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              ClipOval(
-                child: Image.network(
-                  imageUrl,
-                  height: 100,
-                  width: 100,
-                  fit: BoxFit.cover,
-                  errorBuilder:
-                      (context, error, stackTrace) =>
-                          const Icon(Icons.broken_image),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

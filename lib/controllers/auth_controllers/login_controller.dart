@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbrs_mart/core/utils/routes.dart';
 import 'package:pbrs_mart/network/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -49,6 +50,9 @@ class LoginController extends GetxController {
     isLoading.value = false;
 
     if (response != null && response.statusCode == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
       Get.snackbar(
         'Success',
         'Login successful',
@@ -56,12 +60,14 @@ class LoginController extends GetxController {
         backgroundColor: Colors.teal,
         colorText: Colors.white,
         borderRadius: 12,
-        margin: EdgeInsets.all(16),
-        icon: Icon(Icons.check_circle_outline, color: Colors.white),
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 300),
+        margin: const EdgeInsets.all(16),
+        icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+        duration: const Duration(seconds: 3),
+        animationDuration: const Duration(milliseconds: 300),
         forwardAnimationCurve: Curves.easeOutBack,
       );
+
+      // ✅ Navigate to home
       Get.offAllNamed(AppRoutes.bottomNav);
     } else {
       Get.snackbar(
@@ -71,10 +77,10 @@ class LoginController extends GetxController {
         backgroundColor: Colors.teal,
         colorText: Colors.white,
         borderRadius: 12,
-        margin: EdgeInsets.all(16),
-        icon: Icon(Icons.check_circle_outline, color: Colors.white),
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 300),
+        margin: const EdgeInsets.all(16),
+        icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+        duration: const Duration(seconds: 3),
+        animationDuration: const Duration(milliseconds: 300),
         forwardAnimationCurve: Curves.easeOutBack,
       );
     }

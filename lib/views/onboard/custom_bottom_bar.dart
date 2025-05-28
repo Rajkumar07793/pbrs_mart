@@ -31,7 +31,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return Scaffold(
       key: scaffoldKey,
       appBar: CustomAppBar(scaffoldKey: scaffoldKey),
-      drawer: buildAppDrawer(context),
+      drawer: CustomAppDrawer(),
       body: _screens[_selectedIndex],
       floatingActionButton: SizedBox(
         height: 65,

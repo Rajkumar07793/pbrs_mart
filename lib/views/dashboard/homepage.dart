@@ -50,9 +50,7 @@ class HomeScreen extends StatelessWidget {
                 );
               }
             }),
-            const SizedBox(height: 10),
             const TabSection(),
-            const SizedBox(height: 20),
             CarouselSlider(
               items:
                   [
