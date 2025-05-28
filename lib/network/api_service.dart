@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-
 import '../models/user_model.dart';
 
 class ApiService {
   final Dio _dio = Dio();
-
+  static const String baseUrlImage =
+      'https://pbrsmart.com/public/'; // this is use for showing an image
   static const String _baseUrl = 'https://pbrsmart.com/api/users';
   static const String _authToken =
       'ZhhcZ7U4XqDgcp9QEPhmFts4gzNmBIK2ivdplCYshPeRLFYbgJgD6I7pQaz3Ik7e2MrQKV8VzMmsWZHB7UKLvoBObrJarLt5jjTs';
@@ -143,6 +142,19 @@ class ApiService {
       return response;
     } catch (e) {
       print('User types fetch error: $e');
+      return null;
+    }
+  }
+
+  Future<Response?> fetchMainCategoryBySlug(String slug) async {
+    try {
+      final response = await _dio.get(
+        '$_baseUrl/main-category/$slug',
+        options: Options(headers: _headers),
+      );
+      return response;
+    } catch (e) {
+      print('Error fetching main category: $e');
       return null;
     }
   }

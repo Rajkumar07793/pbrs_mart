@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pbrs_mart/network/api_service.dart';
 import '../../controllers/component_controllers/tab_controller.dart';
 import '../../models/type_model.dart';
 
@@ -8,9 +9,7 @@ class TabSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use Get.put only once at the top level (not inside build again and again)
     final controller = Get.put(TabSectionController());
-
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
@@ -30,7 +29,7 @@ class TabSection extends StatelessWidget {
                       .toList(),
             ),
             SizedBox(
-              height: 195,
+              height: 200,
               child: TabBarView(
                 children:
                     controller.tabItems.map((item) {
@@ -45,20 +44,56 @@ class TabSection extends StatelessWidget {
   }
 
   Widget _buildTabContent(TypeModel type) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.68,
-      ),
-      itemCount: 3,
-      itemBuilder:
-          (context, index) => CategoryCard(
-            title: type.name,
-            imageUrl: 'https://pbrsmart.com${type.image}',
-          ),
-    );
+    final TabSectionController controller = Get.find();
+
+    if (!controller.categoryMap.containsKey(type.slug)) {
+      controller.fetchCategoriesForSlug(type.slug);
+    }
+
+    return Obx(() {
+      final categories = controller.categoryMap[type.slug];
+
+      if (categories == null) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (categories.isEmpty) {
+        return const Center(child: Text('No categories found'));
+      }
+
+      return GridView.builder(
+        physics: ScrollPhysics(),
+        shrinkWrap: false,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 0.68,
+        ),
+
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final item = categories[index];
+
+          // Find English name
+          final List names = item['names'] ?? [];
+          final englishName = names.firstWhere(
+            (n) => n['language_id'] == 2,
+            orElse: () => null,
+          );
+          final title =
+              englishName != null
+                  ? englishName['name'] ?? 'No name'
+                  : 'No name';
+
+          // Get image
+          final imagePath = item['image'] ?? '';
+
+          return CategoryCard(
+            title: title,
+            imageUrl: '${ApiService.baseUrlImage}$imagePath',
+          );
+        },
+      );
+    });
   }
 }
 

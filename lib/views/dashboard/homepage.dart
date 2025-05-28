@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
 
     final faker = Faker();
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                 );
               }
             }),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             const TabSection(),
             const SizedBox(height: 20),
             CarouselSlider(
